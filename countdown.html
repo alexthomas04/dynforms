@@ -1,0 +1,275 @@
+<html>
+    <head>
+        <link rel="shortcut icon" href="icon.ico" >
+        <style type="text/css">
+            div{
+                font-family: myfirstfont;
+                
+                color:#33ccff;
+                left:15%;
+                right:auto;
+                vertical-align:middle;
+                text-align: justify; 
+                position:absolute;
+                
+            }
+            p{
+                text-align:right;
+                font-size:200px;
+            }
+            body{
+                background-color:black;
+            }
+            span{
+                width:33%;
+                text-align:center;
+            }
+			#links{
+				right:0;
+			}
+			#links>a{
+				float:right;
+				font-size:50px;
+				z-index:2;
+				text-decoration:none;
+				
+			}
+			#custom{
+				padding:6px;
+				margin:10px;
+				float:right
+			}
+			a{
+				color:#666
+			}
+            @font-face
+                {
+                    font-family: myFirstFont;
+                    src: url(DS-DIGI.TTF);
+                }
+        </style>
+        <title>----</title>
+		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+    <body>
+		<div id='links'>
+			<a href='#' onclick='setShow("spn");'>Supernatural&nbsp;</a>
+			<a href='#' onclick='setShow("arrow");'>Arrow&nbsp;</a>
+			<a href='#' onclick='setShow("flash");'>Flash&nbsp;</a>
+			<a href='#' onclick='setShow("aos");'>AOS&nbsp;</a>
+			<input type='text' onfocus='setShow("custom")' id='custom'>
+		</div>
+        <div style='z-index:-1'>
+        <p id='time'></p>
+		</div>
+        <canvas id="arcs" style="width:35%;height:30%;"></canvas>
+        <canvas id="backgroundCanvas" style="display:none">blarg</canvas>
+        <h1 style="color:green" id='debug'></h1>
+        <script>
+            setInterval(function(){updateTitle();},1000);
+            setInterval(function(){calculate();},10);
+            var date = new Date("October 7, 2014 21:00:00");
+            var counter=0;
+            var requestID = window.requestAnimationFrame(getString);
+            var hours;
+            var minutes;
+            var seconds;
+            var left;
+			var primary_color = "#0099ff";
+			var secondary_color = "#33ccff";
+			
+			var setShow=function(show_name){
+				if(show_name=='spn')
+					{
+						primary_color = "#0099ff";
+						secondary_color = "#33ccff";
+						date = new Date("October 7, 2014 21:00:00");
+						$('#time').css('color',primary_color);
+					}
+				else if(show_name=='arrow'){
+					primary_color = "#26FF00";
+					secondary_color = "#4AB038";
+					date = new Date("October 8, 2014 20:00:00");
+					$('#time').css('color',primary_color);
+				}
+				else if(show_name=='flash'){
+					primary_color = "#FF0303";
+					secondary_color = "#B52F2F";
+					date = new Date("October 7, 2014 20:00:00");
+					$('#time').css('color','#FFFF00');
+				}else if(show_name=='aos'){
+					primary_color = "#0099ff";
+					secondary_color = "#33ccff";
+					date = new Date("September 23, 2014 20:00:00");
+					$('#time').css('color','#FF0303');
+				}else if(show_name=='custom'){
+					primary_color = "white";
+					secondary_color = "#4AB038";
+					date = new Date($('#custom').val());
+					$('#time').css('color',primary_color);
+				}
+				drawBackground();
+			}
+			$('#custom').change(function(){
+				date = new Date($('#custom').val());
+			});
+            function getString(){
+                document.getElementById("time").innerHTML="<span>"+hours + "</span>:<span>" + checkTime(minutes%60) + "</span>:<span>" + checkTime(seconds%60) + "</span>.<span>"+checkTime(left%1000)+"</span>";
+                drawArcs();
+                window.requestAnimationFrame(getString);
+            }
+
+            function updateTitle(){
+                
+                document.title =(checkTime(hours) + ":" + checkTime(minutes%60) + ":" + checkTime(seconds%60) );
+            }
+
+            function calculate(){
+                left = date-(new Date());
+                if(left<0){
+                    date.setDate(date.getDate() + 7);
+                    getString();
+                    return;
+                }
+                seconds= Math.floor(left/1000);
+                minutes = Math.floor(seconds/60);
+                hours = Math.floor(minutes/60);
+            }
+            
+           function drawArc(current,canvas,context,x,y,radius){
+               var circ = Math.PI * 2;
+               var quart = Math.PI / 2;
+               var counterClockwise = true;
+               context.shadowColor   = primary_color;
+                context.shadowOffsetX = 0;
+                context.shadowOffsetY = 0;
+                context.shadowBlur    = 15;
+               context.beginPath();
+               context.arc(x, y, radius, -1*(quart), ((circ) * current)-quart , counterClockwise);
+               context.lineWidth = 3;
+
+               // line color
+               context.strokeStyle = primary_color;
+               context.stroke();
+               context.closePath(); 
+
+           }
+           function checkTime(i) {
+            if (i < 10) {
+               i = "0" + i;
+             }
+            return i;
+        }
+
+            function drawArcs(){
+               var canvas = document.getElementById('arcs');
+               var context = canvas.getContext('2d');
+               var y =30;
+               var radius = 20;
+               var x = 60;
+               context.clearRect(0, 0, canvas.width, canvas.height);
+                drawArc(1-left%1000/1000,canvas,context,x,y,radius);
+                drawArc(1-(left/1000)%60/60,canvas,context,x*2,y,radius);
+               // console.log(1-(left/1000)%60/60);
+               drawArc(1-((left/1000)/60)%60/60,canvas,context,x*3,y,radius);
+
+            }
+			$(document).ready(function(){
+   for(var i =0;i<10;i++){
+        $('body').append($('<br>'));
+    }
+       drawBackground();
+       $( window ).resize(function() {
+          drawBackground();
+        });
+   
+  })
+
+  function drawGradiant(){
+    $('#backgroundCanvas').attr("width",document.width).attr("height",document.height)
+    var hypot = Math.sqrt((document.width^2)*(document.height^2))
+    var c = document.getElementById("backgroundCanvas");
+    var ctx = c.getContext("2d");
+    var grd = ctx.createRadialGradient(c.width/2,0,10,c.width/2,0,hypot*(13/16));
+   console.log(hypot)
+    grd.addColorStop(0,"#3e3e3e");
+    grd.addColorStop(1,"black");
+    ctx.fillStyle=grd;
+    ctx.fillRect(0,0,c.width,c.height);
+    document.body.style.background = "url(" + c.toDataURL() + ")";
+  }
+    
+    function drawHexagon(context, x,y,size,width){
+        var seg = size/4;
+        var twoseg= size/2;
+        context.beginPath();
+        context.moveTo(x+seg,y);
+        context.lineTo(x+seg,y);
+        context.lineTo(x+seg+twoseg,y);
+        context.lineTo(x+size,y+twoseg);
+        context.lineTo(x+seg+twoseg,y+size);
+        context.lineTo(x+seg,y+size);
+        context.lineTo(x,y+twoseg);
+        context.lineTo(x+seg,y);
+        context.closePath();
+        context.lineWidth = width;
+        context.stroke();
+        //context.fill();
+    }
+    
+    function drawHexagons(context,x,y,size,color){
+        context.strokeStyle="rgb(0, 0, 0)";
+        drawHexagon(context,x,y,size,4);
+        context.strokeStyle=color;
+        context.fillStyle=color;
+        drawHexagon(context,x,y,size,1);
+        
+    }
+    function drawBackground(){
+    var c = document.getElementById("backgroundCanvas");
+    var size=15;
+    var distanceFactor=.77;
+    c.width = $('body').width()+50; c.height=$('body').height()+50;
+        console.log($('body').height())
+    var ctx = c.getContext("2d");
+    var hypot = Math.sqrt((c.width^2)*(c.height^2))
+    var bggrd = ctx.createRadialGradient(c.width/2,0,10,c.width/2,0,hypot);
+    bggrd.addColorStop(0,"#313131");
+    bggrd.addColorStop(1,"black");
+    ctx.fillStyle=bggrd;
+    //ctx.fillStyle="rgb(99, 99, 99)";
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle="rgb(0,0,0)";
+//        }
+//    }
+
+    size=50;
+    for(var x=-10 , horisontalCounter=0;x<c.width;horisontalCounter++,x+=size*distanceFactor){
+        for(var y=1, verticalCounter=0 ;y<c.height;verticalCounter++,y+=size){
+            var grd = ctx.createLinearGradient(x,y,x+size,y+size);
+            grd.addColorStop(0,primary_color);
+            grd.addColorStop(1,secondary_color);
+                if( horisontalCounter%2!=0)
+                    drawHexagons(ctx,x,y+size/2,size,grd);
+                else 
+                    drawHexagons(ctx,x,y,size,grd);
+        }
+    }
+         document.body.style.background = "url(" + c.toDataURL() + ")";
+        
+    }
+            getString();
+        </script>
+		<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-53769917-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    </body>
+
+</html>

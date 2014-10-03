@@ -1,0 +1,27 @@
+<div class='col-md-4 col-xs-12 col-lg-3 col-sm-6'>
+	<div class='panel  panel-default' >
+		<div class='panel-heading'>
+			<h3>Date 
+				<span class='glyphicon glyphicon-arrow-left' ng-hide='key==0' ng-click='moveUp(key)'></span>
+				<span class='glyphicon glyphicon-arrow-right' ng-hide='key==formItems.length-1' ng-click='moveDown(key)'></span>
+				<span class='glyphicon glyphicon-chevron-up' style='float:right;'></span>
+			<button class='btn btn-danger' ng-click="removeItem(key)" style='float:right;'><span class='glyphicon glyphicon-remove'  ></span> </button>
+		</h3>
+			
+		</div>
+		<div class='panel-body'>
+			<div class='col-md-12'><label >Name</label>
+					<input style='float:right;'type='text'  ng-model='value.attributes.name' required ng-minlength='4'>
+				</div><br/>
+		<label>Format:</label> <select class="form-control" ng-model="value.attributes.format" ng-options="f for f in formats"><option></option></select><br/>
+		<LABEL>Min Date</LABEL>
+		<datepicker class='well well-sm col-md-12' ng-model='value.validations.minValue'></datepicker><br/>
+		<LABEL>Max Date</LABEL>
+		<datepicker class='well well-sm col-md-12' ng-model='value.validations.maxValue'></datepicker>
+		<div class='col-md-12'>
+					<label>Required</label>
+					<input style='float:right;'type="checkbox" ng-model='value.validations.required'>
+				</div><br/>
+		
+	</div>
+</div>

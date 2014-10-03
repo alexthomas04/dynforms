@@ -1,0 +1,73 @@
+<div class='col-md-4 col-xs-12 col-lg-3 col-sm-6'>
+	<div class='panel panel-default  '>
+		<div class="panel-heading ">
+			<h3 class='panel-title'>Radio 
+				<span class='glyphicon glyphicon-arrow-left' ng-hide='key==0' ng-click='moveUp(key)'></span>
+				<span class='glyphicon glyphicon-arrow-right' ng-hide='key==formItems.length-1' ng-click='moveDown(key)'></span>
+
+				<span class='glyphicon glyphicon-chevron-up' style='float:right;'></span>
+				<button class='btn btn-danger' ng-click="removeItem(key)" style='float:right;'><span class='glyphicon glyphicon-remove'  ></span> </button>
+			</h3></div>
+
+			<div class="panel-body">
+				<form ng-init="radioButtons=value.attributes.radioButtons || [];value.attributes.radioButtons=radioButtons;" required ng-minlength='4'>
+					<div class='col-md-12'><label >Name</label>
+						<input type='text'  ng-model='value.attributes.name'>
+					</div>
+					<div class='col-md-12'><label>Required</label>
+						<input type="checkbox" ng-model='value.validations.required'>
+					</div>
+					<div class="btn-group btn-input clearfix col-md-12">
+						<button type="button" class="btn btn-{{buttonClass||'default'}} dropdown-toggle form-control" data-toggle="dropdown">
+							<span data-bind="label">{{buttonClass || 'Select Class'}}</span> <span class="glyphicon glyphicon-cheveron-down"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu">
+							<li class='Default'><a href="#"  ng-click="buttonClass='Default';value.attributes.class='Default'">Default</a></li>
+							<li class='Primary'><a href="#"  ng-click="buttonClass='Primary';value.attributes.class='Primary'">Primary</a></li>
+							<li class='Info'><a href="#"  ng-click="buttonClass='Info';value.attributes.class='Info'">Info</a></li>
+							<li class='Success'><a href="#"  ng-click="buttonClass='Success';value.attributes.class='Success'">Success</a></li>
+							<li class='Warning'><a href="#"  ng-click="buttonClass='Warning';value.attributes.class='Warning'">Warning</a></li>
+							<li class='Danger'><a href="#"  ng-click="buttonClass='Danger';value.attributes.class='Danger'">Danger</a></li>
+							<li class='Link'><a href="#" ng-click="buttonClass='Link';value.attributes.class='Link'">Link</a></li>
+						</ul>
+					</div>
+
+
+					<label >selection options</label>
+					<button ng-click="radioButtons.push({})" class='btn'>Add option</button>
+					<div ng-repeat="(key, button) in radioButtons">
+						<div class="col-md-12">
+							<label ng-init="button.order=key" >Name</label>
+							<input ng-model='button.name' type='text' required>
+						</div><br/>
+						<div class='col-md-12'>
+							<label >Value</label>
+							<input ng-model='button.value' type='text' required>
+						</div><br/>
+						<div class='col-md-12'><label>Default Selected</label>
+						<input type="checkbox" ng-model='button.isDefault'>
+					</div><br/>
+						<div class='col-md-12'>
+							<div class="btn-group btn-input clearfix">
+								<button type="button" class="btn btn-{{buttonClass||'default'}} dropdown-toggle form-control" data-toggle="dropdown">
+									<span data-bind="label">{{buttonClass || 'Select Class'}}</span> <span class="glyphicon glyphicon-cheveron-down"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#" class='Default' ng-click="buttonClass='Default';button.class='Default'">Default</a></li>
+									<li><a href="#" class='Primary' ng-click="buttonClass='Primary';button.class='Primary'">Primary</a></li>
+									<li><a href="#" class='Info' ng-click="buttonClass='Info';button.class='Info'">Info</a></li>
+									<li><a href="#" class='Success' ng-click="buttonClass='Success';button.class='Success'">Success</a></li>
+									<li><a href="#" class='Warning' ng-click="buttonClass='Warning';button.class='Warning'">Warning</a></li>
+									<li><a href="#" class='Danger' ng-click="buttonClass='Danger';button.class='Danger'">Danger</a></li>
+									<li><a href="#" class='Link' ng-click="buttonClass='Link';button.class='Link'">Link</a></li>
+								</ul>
+							</div>
+						</div><br/>
+						<button class='btn btn-danger ' ng-click="radioButtons.splice(key,1)"><span class='glyphicon glyphicon-remove' ></span> Remove</button>
+						<hr/>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	

@@ -1,0 +1,13 @@
+<div class='panel panel-{{formItem.attributes.class||"default"}}'>
+	<div class='panel-heading'><h3 class='panel-title'>{{formItem.attributes.name}}</h3> </div>
+	<div class='panel-body'>
+		<div class='btn-group btn-group-vertical' data-toggle='buttons'>
+			<div ng-repeat="button in formItem.attributes.radioButtons" class='btn btn-{{button.class || "default"}}' ng-class="{active : button.isDefault}">
+			<input type='radio' ng-model="button.result" value='{{button.value}}' data-id='{{formItem.att_id}}' >
+				<label >
+					{{button.name}}
+				</label>	
+			</div>
+		</div>
+	</div>
+</div>
